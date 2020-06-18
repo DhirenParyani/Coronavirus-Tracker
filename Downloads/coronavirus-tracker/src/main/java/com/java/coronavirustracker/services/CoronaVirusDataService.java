@@ -28,6 +28,10 @@ public class CoronaVirusDataService {
 	private static String VIRUS_DATA_URL="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 	@Getter(lazy = true)
 	private List<LocationStats> allStats;
+	public List<LocationStats> getAllStats() {
+		return allStats;
+	}
+	
 	//execute this when application starts
 	@PostConstruct
 	//We want it to run on regular basis
@@ -56,12 +60,14 @@ public class CoronaVirusDataService {
 			LocationStats locationStats=new LocationStats();
 			locationStats.setState(record.get("Province/State"));
 			locationStats.setCountry(record.get("Country/Region"));
-			locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size()-1)));
-			System.out.println(locationStats);
+		    int latestCases=Integer.parseInt(record.get(record.size()-1));
+			int previousDayCases=Integer.parseInt(record.get(record.size()-2));
+			locationStats.setLatestTotalCases(latestCases);
+			locationStats.setDiffFromPrevDay(latestCases-previousDayCases);
 			newStats.add(locationStats);
 		
-		    String state = record.get("Province/State");
-		    System.out.println(state);
+		  
+		    
 		   
 		}
 		this.allStats=newStats;
