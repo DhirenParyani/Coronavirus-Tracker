@@ -26,8 +26,8 @@ import lombok.Getter;
 //Spring is going to create an instance of this since it is annotated as a service
 public class CoronaVirusDataService {
 	private static String VIRUS_DATA_URL="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
-	@Getter(lazy = true)
-	private List<LocationStats> allStats;
+	
+	private List<LocationStats> allStats=new ArrayList<LocationStats>();
 	public List<LocationStats> getAllStats() {
 		return allStats;
 	}
@@ -50,7 +50,6 @@ public class CoronaVirusDataService {
 		HttpRequest request=HttpRequest.newBuilder().uri(URI.create(VIRUS_DATA_URL)).build();
 		//HttpResponse.BodyHandlers.ofString() - take the body and return it as a string
 		HttpResponse<String> httpResponse=client.send(request, HttpResponse.BodyHandlers.ofString());
-		System.out.println(httpResponse.body());
 		//String Reader is an instance of reader which parses string
 		StringReader csvBodyReader=new StringReader(httpResponse.body());
 		//parsing CSV
